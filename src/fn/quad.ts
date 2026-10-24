@@ -137,6 +137,19 @@ export const quadTransform = <T extends z.infer<typeof base_quad_def>>(
     v.pl = v.pw! * (1.0 / 0.6)
   }
 
+  for (const [name, value] of [
+    ["p", v.p],
+    ["px", v.px],
+    ["py", v.py],
+  ] as const) {
+    if (value === undefined) continue
+    if (!Number.isFinite(value) || value <= 0) {
+      throw new Error(
+        `Invalid pitch "${name}" (${value}): quad/lcc footprints require a positive, finite pitch`,
+      )
+    }
+  }
+
   return v as NowDefined<T, "w" | "h" | "p" | "pw" | "pl">
 }
 
